@@ -48,10 +48,51 @@
  </div> 
 
   <div class="page-header">
-  <h1><font color=#428bca>Training Stage <small>Coherent noise model</small></h1>
+  <h1><font color=#428bca>Training Stage </font><small>Coherent noise model</small></h1>
 </div>
 
-<p class="text-justify"><font color="white">In order to capture the naturally varying environmental conditions and their effect on the reflectance spectrum, repeat measurements at a single location were made.  In the ideal scenario, making repeat measurements at the same locations would yield the same spectra.  In practice, changes in the water surface, rocking of the boat and water currents (to name only a few) mean that the spectra will change independently of the IOPs.  It is these variations that are captured by taking repeat measurements.  By modelling these changes, through the training stage, these naturally occurring variations can be propagated through the synthetic data sets.  The method of modelling these variations is described below. This section uses on SCCP location (ARM) as an exemplar.  The process was repeated for all of the SCCP locations on the Swan River. </font></p>
+  <p class="text-justify"><font color="white"> In order to capture the naturally varying environmental conditions and their effect on the reflectance spectrum, repeat measurements at a single location were made.  In the ideal scenario, making repeat measurements at the same locations would yield the same spectra.  In practice, changes in the water surface, rocking of the boat and water currents (to name only a few) mean that the spectra will change independently of the IOPs.  It is these variations that are captured by taking repeat measurements.  By modelling these changes, through the training stage, these naturally occurring variations can be propagated through the synthetic data sets.  The method of modelling these variations is described below. This section uses on SCCP location (ARM) as an exemplar.  The process was repeated for all of the SCCP locations on the Swan River. </font></p>
+
+<h3 class="text-justify"><font color="white"> Summary of method:</h3>
+<h4>Training Stage</h4>
+
+
+  <p class="text-justify"> Choose a phytoplankton spectrum that best represents the absorption spectral shape, this may be obtained from laboratory measurements. </p>
+
+
+  <p class="text-justify"> Define a set of training \(R_{rs}\) that captures the natural variance seen in field measurements.  In this study this was achieved by making repeat measurements of \(R_{rs}\) at the SCCP sample locations while the boat was stationary and water samples were collected. Careful attention was made to keep the sensor pointing at the same point of the water surface.</p>
+
+
+
+<p class="text-justify"> Detrend the ensemble average of all the reflectance spectra: </p> 
+
+$$\mu_{R_{rs}}(\lambda) = \frac{1}{n}\sum^n_{i=1} R_{rs_i}(\lambda) $$
+
+$$
+\Delta_{Rrs}(\lambda) = \left\langle R_{rs}(\lambda)\right\rangle - \mu_{R_{rs}}(\lambda) \\
+$$
+
+
+<p>Calculate the standard deviation: </p>
+
+$$
+\sigma_{\Delta_{Rrs}(\lambda)} = \sqrt{\frac{1}{n}\sum^n_{i=1}\left(R_{rs_i} - \mu_{R_{rs}}\right)^2} \\
+$$
+
+
+<p>Calculate the normalised difference of the standard deviation: </p>
+
+$$
+\bar{\Delta}_{Rrs}(\lambda) = \frac{\Delta_{Rrs}(\lambda)}{\sigma_{\Delta_{Rrs}(\lambda)}} \\
+$$
+
+
+<p>Calculate the power spectrum: </p>
+
+
+$$ Y = \mathcal{F}\{\bar{\Delta}_{rs}(\lambda)\} $$
+
+$$ S_{\lambda \lambda} = \mathcal{F} \left < YY^* \right > $$
 
 
 <div class="page-header">
@@ -59,6 +100,48 @@
 </div>
 
 <p class="text-justify"><font color="white">For each wavelength we wish to randomly generate a value within the defined variance of that wavelength.  To do this, first generate random numbers \(n\) between -0.5 and 0.5.  As a first approximation, a random distribution is used, but the distribution that is used should conform to the distribution that the IOPs conform too.  This is usually unknown without lots of repeat measurements, so a random distribution is used as a first guess.  The actual distribution is subject to further investigation.  These random values will be scaled by the power spectrum in later steps in the process.</font></p>
+
+$$
+n = rand(k, \lambda)_{-0.5}^{0.5}
+$$
+
+<p> Calculate the Fourier transform of `n` </p>
+$$
+N = \mathcal{F}\{n\}
+$$
+
+<p> Multiply the Fourier transform of the random points by the square root of the power spectrum </p>
+$$
+Y= N\sqrt{S_{YY}}
+$$
+
+<p>Transform the correlated noise to the real domain by taking the inverse Fourier transform </p>
+$$
+y(\lambda) = \mathcal{F}^{-1}\left\{Y\right\}
+$$
+
+<p> Normalise the correlated noise in the real domain  </p>
+$$
+\hat{y}(\lambda)=\frac{y(\lambda)}{\sigma_y}
+$$
+
+<p> Multiply the standard deviation of the measured `R_{rs}` by the normalised correlated noise </p>
+$$
+z(\lambda)=\hat{y}(\lambda)\sigma_{\Delta_{rs}}(\lambda)
+$$
+
+<p> Generate synthetic `\hat{R}_{rs}` by adding any measured single `R_{rs}` with `z(\lambda)` </p>
+$$
+\hat{R}_{rs}(\lambda) = R_{rs} + z(\lambda)
+$$
+
+
+
+
+
+
+
+
 
 
 <div class="page-header">

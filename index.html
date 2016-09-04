@@ -66,33 +66,39 @@
 
 <p class="text-justify"> Detrend the ensemble average of all the reflectance spectra: </p> 
 
-$$\mu_{R_{rs}}(\lambda) = \frac{1}{n}\sum^n_{i=1} R_{rs_i}(\lambda) $$
+$$
+\mu_{R_{rs}}(\lambda) = \frac{1}{n}\sum^n_{i=1} R_{rs_i}(\lambda)
+$$
 
 $$
-\Delta_{Rrs}(\lambda) = \left\langle R_{rs}(\lambda)\right\rangle - \mu_{R_{rs}}(\lambda) \\
+\Delta_{Rrs}(\lambda) = \left\langle R_{rs}(\lambda)\right\rangle - \mu_{R_{rs}}(\lambda) 
 $$
 
 
 <p>Calculate the standard deviation: </p>
 
 $$
-\sigma_{\Delta_{Rrs}(\lambda)} = \sqrt{\frac{1}{n}\sum^n_{i=1}\left(R_{rs_i} - \mu_{R_{rs}}\right)^2} \\
+\sigma_{\Delta_{Rrs}(\lambda)} = \sqrt{\frac{1}{n}\sum^n_{i=1}\left(R_{rs_i} - \mu_{R_{rs}}\right)^2} 
 $$
 
 
 <p>Calculate the normalised difference of the standard deviation: </p>
 
 $$
-\bar{\Delta}_{Rrs}(\lambda) = \frac{\Delta_{Rrs}(\lambda)}{\sigma_{\Delta_{Rrs}(\lambda)}} \\
+\bar{\Delta}_{Rrs}(\lambda) = \frac{\Delta_{Rrs}(\lambda)}{\sigma_{\Delta_{Rrs}(\lambda)}} 
 $$
 
 
 <p>Calculate the power spectrum: </p>
 
 
-$$ Y = \mathcal{F}\{\bar{\Delta}_{rs}(\lambda)\} $$
+$$
+Y = \mathcal{F}\{\bar{\Delta}_{rs}(\lambda)\} 
+$$
 
-$$ S_{\lambda \lambda} = \mathcal{F} \left < YY^* \right > $$
+$$
+S_{\lambda \lambda} = \mathcal{F} \left < YY^* \right >
+$$
 
 
 <div class="page-header">
